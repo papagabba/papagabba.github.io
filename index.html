@@ -13,20 +13,19 @@
 body{
   font-family:'Orbitron',sans-serif;
   color:#fff;
-  background:#000;
   overflow-x:hidden;
+  background:#000;
 }
 
 /* ===== ФОН ===== */
 .bg{
   position:fixed;
-  top:0;
-  left:0;
   width:100%;
   height:100%;
-  background:url("https://i.imgur.com/1pNOWSV.jpeg") center/cover no-repeat;
-  filter:brightness(0.4);
-  z-index:-1;
+  background:url("https://i.imgur.com/YnRN8a6.jpeg") center/cover no-repeat;
+  transform:scale(1.2);
+  filter:blur(6px) brightness(0.4);
+  z-index:-2;
 }
 
 /* затемнение */
@@ -35,7 +34,7 @@ body{
   width:100%;
   height:100%;
   background:rgba(0,0,0,0.6);
-  z-index:0;
+  z-index:-1;
 }
 
 /* контент */
@@ -53,7 +52,7 @@ body{
   align-items:center;
 }
 
-/* GLITCH */
+/* GLITCH TEXT */
 h1{
   font-size:5rem;
   letter-spacing:10px;
@@ -72,7 +71,7 @@ h1::after{color:blue;animation:g2 .4s infinite;}
 @keyframes g1{50%{transform:translate(-2px,2px)}}
 @keyframes g2{50%{transform:translate(2px,-2px)}}
 
-/* КНОПКА */
+/* BUTTON */
 .btn{
   margin-top:30px;
   padding:15px 40px;
@@ -108,7 +107,7 @@ h1::after{color:blue;animation:g2 .4s infinite;}
   transform:scale(1.05);
 }
 
-/* MERCH BTN */
+/* BUTTON */
 .merch-btn{
   display:block;
   margin-top:15px;
@@ -143,15 +142,30 @@ h1::after{color:blue;animation:g2 .4s infinite;}
   color:#000;
 }
 
-/* GLITCH IMAGE */
+/* ===== КУРСОР ===== */
+.cursor{
+  position:fixed;
+  width:14px;
+  height:14px;
+  background:#fff;
+  border-radius:50%;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:9999;
+}
+
+/* ===== ГЛИТЧ КАРТИНКА (НОВАЯ) ===== */
 #glitch-img{
   position:fixed;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  max-width:70%;
+  max-width:60%;
+  max-height:60%;
   opacity:0;
-  z-index:3;
+  z-index:5;
+  pointer-events:none;
+  filter:contrast(2) brightness(1.2);
 }
 
 /* FLASH */
@@ -161,7 +175,7 @@ h1::after{color:blue;animation:g2 .4s infinite;}
   height:100%;
   background:#fff;
   opacity:0;
-  z-index:2;
+  z-index:4;
 }
 </style>
 </head>
@@ -171,32 +185,47 @@ h1::after{color:blue;animation:g2 .4s infinite;}
 <div class="bg"></div>
 <div class="overlay"></div>
 
-<img id="glitch-img" src="https://i.imgur.com/1pNOWSV.jpeg">
+<div class="cursor" id="cursor"></div>
+
+<!-- НОВАЯ ГЛИТЧ КАРТИНКА -->
+<img id="glitch-img" src="https://i.imgur.com/zjsLhAJ.png">
+
 <div class="flash" id="flash"></div>
 
 <audio id="sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3"></audio>
 
 <script>
-/* звук при клике */
+/* курсор */
+const cursor = document.getElementById("cursor");
+document.addEventListener("mousemove", e=>{
+  cursor.style.left = e.clientX + "px";
+  cursor.style.top = e.clientY + "px";
+});
+
+/* звук */
 document.body.addEventListener("click",()=>{
   document.getElementById("sound").play();
 },{once:true});
 
-/* glitch */
+/* ГЛИТЧ ЭФФЕКТ */
 setInterval(()=>{
-  let img=document.getElementById("glitch-img");
-  let flash=document.getElementById("flash");
+  let img = document.getElementById("glitch-img");
+  let flash = document.getElementById("flash");
 
-  if(Math.random()>0.8){
-    img.style.opacity=1;
-    flash.style.opacity=0.3;
+  if(Math.random() > 0.7){
+    img.style.opacity = 1;
+    img.style.transform = "translate(-50%,-50%) scale(1.1)";
+
+    flash.style.opacity = 0.3;
 
     setTimeout(()=>{
-      img.style.opacity=0;
-      flash.style.opacity=0;
-    },120);
+      img.style.opacity = 0;
+      img.style.transform = "translate(-50%,-50%)";
+      flash.style.opacity = 0;
+    }, 120);
   }
-},2500);
+
+}, 2000);
 </script>
 
 <!-- HERO -->

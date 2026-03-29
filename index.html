@@ -11,22 +11,51 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  background:#000;
   color:#fff;
   font-family:'Orbitron',sans-serif;
   overflow-x:hidden;
 }
 
-/* VHS NOISE */
+/* VIDEO BACKGROUND */
+.video-bg{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-2;
+  filter:brightness(0.4) contrast(1.2);
+}
+
+/* NOISE */
 body::before{
   content:"";
   position:fixed;
   width:100%;
   height:100%;
   background:url("https://grainy-gradients.vercel.app/noise.svg");
-  opacity:.08;
-  pointer-events:none;
+  opacity:.12;
   z-index:999;
+  pointer-events:none;
+}
+
+/* FLASH */
+body::after{
+  content:"";
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:white;
+  opacity:0;
+  pointer-events:none;
+  animation:flash 8s infinite;
+}
+
+@keyframes flash{
+  0%,96%,100%{opacity:0}
+  97%{opacity:0.2}
+  98%{opacity:0}
 }
 
 /* HERO */
@@ -43,7 +72,6 @@ body::before{
   font-size:5rem;
   letter-spacing:10px;
   position:relative;
-  animation:glitch 1s infinite;
 }
 
 .glitch::before,
@@ -51,25 +79,27 @@ body::before{
   content:"PAPA GABBA";
   position:absolute;
   left:0;
-  top:0;
 }
 
 .glitch::before{
   color:red;
-  transform:translate(2px,0);
+  animation:glitch1 1s infinite;
 }
 
 .glitch::after{
   color:blue;
-  transform:translate(-2px,0);
+  animation:glitch2 1s infinite;
 }
 
-@keyframes glitch{
+@keyframes glitch1{
   0%{transform:translate(0)}
-  20%{transform:translate(-2px,2px)}
-  40%{transform:translate(2px,-2px)}
-  60%{transform:translate(-2px,0)}
-  80%{transform:translate(2px,2px)}
+  50%{transform:translate(-3px,2px)}
+  100%{transform:translate(0)}
+}
+
+@keyframes glitch2{
+  0%{transform:translate(0)}
+  50%{transform:translate(3px,-2px)}
   100%{transform:translate(0)}
 }
 
@@ -90,13 +120,8 @@ body::before{
 
 /* SECTION */
 .section{
-  padding:80px 20px;
+  padding:100px 20px;
   text-align:center;
-}
-
-h2{
-  margin-bottom:30px;
-  letter-spacing:3px;
 }
 
 /* MERCH */
@@ -107,22 +132,12 @@ h2{
 
 .merch img{
   width:100%;
-  border:1px solid rgba(255,255,255,0.2);
   transition:.3s;
 }
 
-/* GLITCH IMAGE */
 .merch img:hover{
-  animation:imgGlitch .3s infinite;
-  filter:contrast(1.5) brightness(1.2);
-}
-
-@keyframes imgGlitch{
-  0%{transform:translate(0)}
-  25%{transform:translate(-3px,2px)}
-  50%{transform:translate(3px,-2px)}
-  75%{transform:translate(-2px,1px)}
-  100%{transform:translate(0)}
+  transform:scale(1.05) rotate(1deg);
+  filter:contrast(1.5);
 }
 
 /* BUTTON GLITCH */
@@ -133,11 +148,10 @@ h2{
   border:1px solid #fff;
   text-decoration:none;
   color:#fff;
-  transition:.3s;
 }
 
 .merch-btn:hover{
-  animation:glitch .2s infinite;
+  animation:glitch1 .2s infinite;
   background:#fff;
   color:#000;
 }
@@ -152,9 +166,8 @@ h2{
 .socials a{
   border:1px solid #fff;
   padding:10px 20px;
-  text-decoration:none;
   color:#fff;
-  transition:.3s;
+  text-decoration:none;
 }
 
 .socials a:hover{
@@ -171,6 +184,11 @@ footer{
 </head>
 
 <body>
+
+<!-- VIDEO BACKGROUND -->
+<video class="video-bg" autoplay muted loop>
+  <source src="https://cdn.coverr.co/videos/coverr-dark-noise-1579/1080p.mp4" type="video/mp4">
+</video>
 
 <!-- HERO -->
 <section class="hero">
@@ -196,7 +214,7 @@ footer{
   <div class="merch">
     <img src="https://i.imgur.com/CI0wmv2.jpeg">
 
-    <p style="margin-top:10px;">PAPA GABBA T-SHIRT</p>
+    <p>PAPA GABBA T-SHIRT</p>
     <p style="opacity:.6;font-size:12px;">LIMITED DROP</p>
 
     <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="merch-btn">

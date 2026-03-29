@@ -83,20 +83,17 @@ body{
 /* MERCH */
 .merch{
   position:relative;
-  max-width:350px; /* контролирует размер */
+  max-width:350px;
   margin:0 auto;
   overflow:hidden;
 }
 
-/* контейнер под картинку */
 .merch img{
   width:100%;
-  height:auto;
   display:block;
   transition:0.4s;
 }
 
-/* overlay */
 .merch::after{
   content:"";
   position:absolute;
@@ -107,9 +104,9 @@ body{
   background:rgba(0,0,0,0.4);
   opacity:0;
   transition:0.3s;
+  pointer-events:none; /* 🔥 фикс */
 }
 
-/* hover эффект */
 .merch:hover img{
   transform:scale(1.05);
   filter:contrast(1.3);
@@ -117,11 +114,6 @@ body{
 
 .merch:hover::after{
   opacity:1;
-}
-
-/* glitch микро */
-.merch:hover img{
-  animation:glitch 0.2s infinite;
 }
 
 @keyframes glitch{

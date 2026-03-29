@@ -10,20 +10,22 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
+/* ===== BASE ===== */
 body{
   font-family:'Orbitron',sans-serif;
   color:#fff;
   background:url("https://i.imgur.com/x6arHGg.jpeg") center/cover no-repeat fixed;
   overflow-x:hidden;
+  cursor:none;
 }
 
-/* DARK OVERLAY */
+/* DARK */
 body::before{
   content:"";
   position:fixed;
   width:100%;
   height:100%;
-  background:rgba(0,0,0,0.85);
+  background:rgba(0,0,0,0.9);
   z-index:0;
 }
 
@@ -34,26 +36,24 @@ body::after{
   width:100%;
   height:100%;
   background:url("https://grainy-gradients.vercel.app/noise.svg");
-  opacity:0.2;
+  opacity:0.25;
   z-index:1;
-  pointer-events:none;
 }
 
-/* VHS SCANLINES */
+/* VHS */
 .vhs{
   position:fixed;
   width:100%;
   height:100%;
   background:repeating-linear-gradient(
     0deg,
-    rgba(255,255,255,0.03),
-    rgba(255,255,255,0.03) 1px,
+    rgba(255,255,255,0.04),
+    rgba(255,255,255,0.04) 1px,
     transparent 1px,
     transparent 3px
   );
-  animation:scan 6s linear infinite;
+  animation:scan 4s linear infinite;
   z-index:2;
-  pointer-events:none;
 }
 
 @keyframes scan{
@@ -61,8 +61,20 @@ body::after{
   100%{transform:translateY(10px)}
 }
 
+/* CURSOR */
+.cursor{
+  width:12px;
+  height:12px;
+  background:#fff;
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  mix-blend-mode:difference;
+}
+
 /* CONTENT */
-.hero, .section{
+.hero,.section{
   position:relative;
   z-index:3;
 }
@@ -84,37 +96,25 @@ h1{
   animation:glitchMain 1s infinite;
 }
 
-h1::before, h1::after{
+h1::before,h1::after{
   content:"PAPA GABBA";
   position:absolute;
   left:0;
 }
 
-h1::before{
-  color:red;
-  animation:glitch1 0.3s infinite;
-}
-
-h1::after{
-  color:blue;
-  animation:glitch2 0.3s infinite;
-}
+h1::before{color:red;animation:gl1 .2s infinite}
+h1::after{color:blue;animation:gl2 .2s infinite}
 
 @keyframes glitchMain{
-  0%,100%{transform:none}
-  50%{transform:skew(-2deg)}
+  50%{transform:skew(-3deg)}
 }
 
-@keyframes glitch1{
-  0%{transform:translate(0)}
-  50%{transform:translate(-3px,2px)}
-  100%{transform:translate(0)}
+@keyframes gl1{
+  50%{transform:translate(-4px,2px)}
 }
 
-@keyframes glitch2{
-  0%{transform:translate(0)}
-  50%{transform:translate(3px,-2px)}
-  100%{transform:translate(0)}
+@keyframes gl2{
+  50%{transform:translate(4px,-2px)}
 }
 
 /* BUTTON */
@@ -122,9 +122,8 @@ h1::after{
   margin-top:30px;
   padding:15px 40px;
   border:1px solid #fff;
-  text-decoration:none;
   color:#fff;
-  transition:0.3s;
+  text-decoration:none;
 }
 
 .btn:hover{
@@ -139,73 +138,37 @@ h1::after{
 }
 
 /* MERCH */
-.merch{
-  max-width:400px;
-  margin:0 auto;
-}
-
 .merch img{
   width:100%;
-  border:1px solid rgba(255,255,255,0.2);
-  transition:0.3s;
+  max-width:400px;
+  transition:.2s;
 }
 
 .merch img:hover{
-  animation:glitchImg 0.2s infinite;
-  filter:contrast(2) brightness(1.3);
+  animation:glitchImg .15s infinite;
+  filter:contrast(2);
 }
 
 @keyframes glitchImg{
-  0%{transform:translate(0)}
-  25%{transform:translate(-5px,3px)}
-  50%{transform:translate(5px,-3px)}
-  75%{transform:translate(-3px,2px)}
-  100%{transform:translate(0)}
+  50%{transform:translate(-6px,3px)}
 }
 
-/* BUTTON MERCH */
+/* BUTTON */
 .merch-btn{
-  display:block;
+  display:inline-block;
   margin-top:15px;
-  padding:12px;
+  padding:10px 20px;
   border:1px solid #fff;
-  text-decoration:none;
   color:#fff;
-  transition:0.3s;
+  text-decoration:none;
 }
 
 .merch-btn:hover{
-  animation:glitchBtn 0.15s infinite;
   background:#fff;
   color:#000;
 }
 
-@keyframes glitchBtn{
-  0%{transform:translate(0)}
-  50%{transform:translate(2px,-2px)}
-  100%{transform:translate(0)}
-}
-
-/* SOCIAL */
-.socials{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-}
-
-.socials a{
-  border:1px solid #fff;
-  padding:10px 20px;
-  text-decoration:none;
-  color:#fff;
-}
-
-.socials a:hover{
-  background:#fff;
-  color:#000;
-}
-
-/* FLASH EFFECT */
+/* FLASH */
 .flash{
   position:fixed;
   width:100%;
@@ -213,20 +176,21 @@ h1::after{
   background:#fff;
   opacity:0;
   z-index:999;
-  pointer-events:none;
-  animation:flash 8s infinite;
 }
 
-@keyframes flash{
-  0%,95%,100%{opacity:0}
-  96%{opacity:0.8}
+/* JUMPSCARE IMAGE */
+#scare{
+  position:fixed;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  z-index:998;
 }
 
-/* FOOTER */
-footer{
-  padding:40px;
-  text-align:center;
-  opacity:.5;
+/* PARALLAX */
+.parallax{
+  transition:transform 0.1s;
 }
 </style>
 </head>
@@ -234,63 +198,77 @@ footer{
 <body>
 
 <div class="vhs"></div>
-<div class="flash"></div>
+<div class="flash" id="flash"></div>
+<img id="scare" src="https://i.imgur.com/8Km9tLL.png">
+
+<div class="cursor" id="cursor"></div>
 
 <!-- SOUND -->
-<audio id="bgSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3"></audio>
+<audio id="bg" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3"></audio>
+<audio id="scareSound" src="https://cdn.pixabay.com/audio/2022/10/16/audio_0c8e0d9b53.mp3"></audio>
 
 <script>
-document.body.addEventListener("click", ()=>{
-  document.getElementById("bgSound").play();
+/* SOUND */
+document.body.addEventListener("click",()=>{
+ document.getElementById("bg").play();
 },{once:true});
+
+/* CURSOR */
+const c = document.getElementById("cursor");
+document.addEventListener("mousemove",e=>{
+ c.style.left=e.clientX+"px";
+ c.style.top=e.clientY+"px";
+});
+
+/* PARALLAX */
+document.addEventListener("mousemove",e=>{
+ document.body.style.backgroundPosition =
+  (50+e.clientX/100)+"% "+(50+e.clientY/100)+"%";
+});
+
+/* RANDOM FLASH */
+setInterval(()=>{
+ let f=document.getElementById("flash");
+ f.style.opacity=1;
+ setTimeout(()=>f.style.opacity=0,100);
+},7000);
+
+/* JUMPSCARE */
+setInterval(()=>{
+ let s=document.getElementById("scare");
+ let sound=document.getElementById("scareSound");
+ s.style.opacity=1;
+ sound.play();
+ setTimeout(()=>s.style.opacity=0,200);
+},20000);
 </script>
 
 <!-- HERO -->
 <section class="hero">
   <h1>PAPA GABBA</h1>
-
-  <a href="https://open.spotify.com/" target="_blank" class="btn">
-    LISTEN
-  </a>
+  <a href="#" class="btn">LISTEN</a>
 </section>
 
 <!-- ABOUT -->
 <section class="section">
   <h2>ABOUT</h2>
   <p style="opacity:.6;max-width:500px;margin:0 auto;">
-    Raw energy. Dark aesthetics. Papa Gabba is chaos, distortion and raw underground sound.
+    Dark. Aggressive. Distorted reality.
   </p>
 </section>
 
 <!-- MERCH -->
 <section class="section">
   <h2>MERCH</h2>
-
   <div class="merch">
     <img src="https://i.imgur.com/CI0wmv2.jpeg">
-
-    <p style="margin-top:10px;">PAPA GABBA T-SHIRT</p>
-    <p style="opacity:.6;font-size:12px;">LIMITED DROP</p>
-
-    <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="merch-btn">
-      BUY
-    </a>
-  </div>
-
-</section>
-
-<!-- SOCIAL -->
-<section class="section">
-  <h2>FOLLOW</h2>
-
-  <div class="socials">
-    <a href="https://instagram.com/papagabbaofficial" target="_blank">Instagram</a>
-    <a href="https://open.spotify.com/" target="_blank">Spotify</a>
+    <p>PAPA GABBA T-SHIRT</p>
+    <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="merch-btn">BUY</a>
   </div>
 </section>
 
-<footer>
-  © 2026 PAPA GABBA
+<footer style="text-align:center;padding:40px;opacity:.5;">
+© 2026 PAPA GABBA
 </footer>
 
 </body>

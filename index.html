@@ -11,51 +11,60 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  color:#fff;
   font-family:'Orbitron',sans-serif;
+  color:#fff;
+  background:url("https://i.imgur.com/x6arHGg.jpeg") center/cover no-repeat fixed;
   overflow-x:hidden;
 }
 
-/* VIDEO BACKGROUND */
-.video-bg{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:-2;
-  filter:brightness(0.4) contrast(1.2);
-}
-
-/* NOISE */
+/* DARK OVERLAY */
 body::before{
   content:"";
   position:fixed;
   width:100%;
   height:100%;
-  background:url("https://i.imgur.com/1pNOWSV.jpeg");
-  opacity:.12;
-  z-index:999;
-  pointer-events:none;
+  background:rgba(0,0,0,0.85);
+  z-index:0;
 }
 
-/* FLASH */
+/* NOISE */
 body::after{
   content:"";
   position:fixed;
   width:100%;
   height:100%;
-  background:white;
-  opacity:0;
+  background:url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity:0.2;
+  z-index:1;
   pointer-events:none;
-  animation:flash 8s infinite;
 }
 
-@keyframes flash{
-  0%,96%,100%{opacity:0}
-  97%{opacity:0.2}
-  98%{opacity:0}
+/* VHS SCANLINES */
+.vhs{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.03),
+    rgba(255,255,255,0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation:scan 6s linear infinite;
+  z-index:2;
+  pointer-events:none;
+}
+
+@keyframes scan{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(10px)}
+}
+
+/* CONTENT */
+.hero, .section{
+  position:relative;
+  z-index:3;
 }
 
 /* HERO */
@@ -68,27 +77,32 @@ body::after{
 }
 
 /* GLITCH TEXT */
-.glitch{
+h1{
   font-size:5rem;
   letter-spacing:10px;
   position:relative;
+  animation:glitchMain 1s infinite;
 }
 
-.glitch::before,
-.glitch::after{
+h1::before, h1::after{
   content:"PAPA GABBA";
   position:absolute;
   left:0;
 }
 
-.glitch::before{
+h1::before{
   color:red;
-  animation:glitch1 1s infinite;
+  animation:glitch1 0.3s infinite;
 }
 
-.glitch::after{
+h1::after{
   color:blue;
-  animation:glitch2 1s infinite;
+  animation:glitch2 0.3s infinite;
+}
+
+@keyframes glitchMain{
+  0%,100%{transform:none}
+  50%{transform:skew(-2deg)}
 }
 
 @keyframes glitch1{
@@ -110,7 +124,7 @@ body::after{
   border:1px solid #fff;
   text-decoration:none;
   color:#fff;
-  transition:.3s;
+  transition:0.3s;
 }
 
 .btn:hover{
@@ -120,7 +134,7 @@ body::after{
 
 /* SECTION */
 .section{
-  padding:100px 20px;
+  padding:80px 20px;
   text-align:center;
 }
 
@@ -132,15 +146,24 @@ body::after{
 
 .merch img{
   width:100%;
-  transition:.3s;
+  border:1px solid rgba(255,255,255,0.2);
+  transition:0.3s;
 }
 
 .merch img:hover{
-  transform:scale(1.05) rotate(1deg);
-  filter:contrast(1.5);
+  animation:glitchImg 0.2s infinite;
+  filter:contrast(2) brightness(1.3);
 }
 
-/* BUTTON GLITCH */
+@keyframes glitchImg{
+  0%{transform:translate(0)}
+  25%{transform:translate(-5px,3px)}
+  50%{transform:translate(5px,-3px)}
+  75%{transform:translate(-3px,2px)}
+  100%{transform:translate(0)}
+}
+
+/* BUTTON MERCH */
 .merch-btn{
   display:block;
   margin-top:15px;
@@ -148,12 +171,19 @@ body::after{
   border:1px solid #fff;
   text-decoration:none;
   color:#fff;
+  transition:0.3s;
 }
 
 .merch-btn:hover{
-  animation:glitch1 .2s infinite;
+  animation:glitchBtn 0.15s infinite;
   background:#fff;
   color:#000;
+}
+
+@keyframes glitchBtn{
+  0%{transform:translate(0)}
+  50%{transform:translate(2px,-2px)}
+  100%{transform:translate(0)}
 }
 
 /* SOCIAL */
@@ -166,8 +196,8 @@ body::after{
 .socials a{
   border:1px solid #fff;
   padding:10px 20px;
-  color:#fff;
   text-decoration:none;
+  color:#fff;
 }
 
 .socials a:hover{
@@ -175,6 +205,24 @@ body::after{
   color:#000;
 }
 
+/* FLASH EFFECT */
+.flash{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:#fff;
+  opacity:0;
+  z-index:999;
+  pointer-events:none;
+  animation:flash 8s infinite;
+}
+
+@keyframes flash{
+  0%,95%,100%{opacity:0}
+  96%{opacity:0.8}
+}
+
+/* FOOTER */
 footer{
   padding:40px;
   text-align:center;
@@ -185,16 +233,23 @@ footer{
 
 <body>
 
-<!-- VIDEO BACKGROUND -->
-<video class="video-bg" autoplay muted loop>
-  <source src="https://cdn.coverr.co/videos/coverr-dark-noise-1579/1080p.mp4" type="video/mp4">
-</video>
+<div class="vhs"></div>
+<div class="flash"></div>
+
+<!-- SOUND -->
+<audio id="bgSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3"></audio>
+
+<script>
+document.body.addEventListener("click", ()=>{
+  document.getElementById("bgSound").play();
+},{once:true});
+</script>
 
 <!-- HERO -->
 <section class="hero">
-  <h1 class="glitch">PAPA GABBA</h1>
+  <h1>PAPA GABBA</h1>
 
-  <a href="https://open.spotify.com/track/7IzqmNEau3loDdGiLRpwcx" target="_blank" class="btn">
+  <a href="https://open.spotify.com/" target="_blank" class="btn">
     LISTEN
   </a>
 </section>
@@ -203,7 +258,7 @@ footer{
 <section class="section">
   <h2>ABOUT</h2>
   <p style="opacity:.6;max-width:500px;margin:0 auto;">
-    Raw energy. Dark aesthetics. Papa Gabba is a project built on underground sound and visual chaos.
+    Raw energy. Dark aesthetics. Papa Gabba is chaos, distortion and raw underground sound.
   </p>
 </section>
 
@@ -214,13 +269,14 @@ footer{
   <div class="merch">
     <img src="https://i.imgur.com/CI0wmv2.jpeg">
 
-    <p>PAPA GABBA T-SHIRT</p>
+    <p style="margin-top:10px;">PAPA GABBA T-SHIRT</p>
     <p style="opacity:.6;font-size:12px;">LIMITED DROP</p>
 
     <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="merch-btn">
       BUY
     </a>
   </div>
+
 </section>
 
 <!-- SOCIAL -->
@@ -229,7 +285,7 @@ footer{
 
   <div class="socials">
     <a href="https://instagram.com/papagabbaofficial" target="_blank">Instagram</a>
-    <a href="https://open.spotify.com/track/7IzqmNEau3loDdGiLRpwcx" target="_blank">Spotify</a>
+    <a href="https://open.spotify.com/" target="_blank">Spotify</a>
   </div>
 </section>
 

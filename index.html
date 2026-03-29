@@ -28,19 +28,12 @@ body{
   z-index:-2;
 }
 
-/* затемнение */
 .overlay{
   position:fixed;
   width:100%;
   height:100%;
   background:rgba(0,0,0,0.6);
   z-index:-1;
-}
-
-/* контент */
-.hero,.section,footer{
-  position:relative;
-  z-index:2;
 }
 
 /* HERO */
@@ -52,26 +45,19 @@ body{
   align-items:center;
 }
 
-/* GLITCH TEXT */
-h1{
-  font-size:5rem;
-  letter-spacing:10px;
-  position:relative;
+/* ===== ЛОГО ===== */
+.logo{
+  width:80%;
+  max-width:500px;
+  transition:.3s;
 }
 
-h1::before,h1::after{
-  content:"PAPA GABBA";
-  position:absolute;
-  left:0;
+.logo:hover{
+  transform:scale(1.05);
+  filter:contrast(1.5);
 }
 
-h1::before{color:red;animation:g1 .4s infinite;}
-h1::after{color:blue;animation:g2 .4s infinite;}
-
-@keyframes g1{50%{transform:translate(-2px,2px)}}
-@keyframes g2{50%{transform:translate(2px,-2px)}}
-
-/* BUTTON */
+/* КНОПКА */
 .btn{
   margin-top:30px;
   padding:15px 40px;
@@ -90,6 +76,8 @@ h1::after{color:blue;animation:g2 .4s infinite;}
 .section{
   padding:80px 20px;
   text-align:center;
+  position:relative;
+  z-index:2;
 }
 
 /* MERCH */
@@ -100,21 +88,15 @@ h1::after{color:blue;animation:g2 .4s infinite;}
 
 .merch img{
   width:100%;
-  transition:.3s;
 }
 
-.merch img:hover{
-  transform:scale(1.05);
-}
-
-/* BUTTON */
 .merch-btn{
   display:block;
   margin-top:15px;
   padding:12px;
   border:1px solid #fff;
-  text-decoration:none;
   color:#fff;
+  text-decoration:none;
 }
 
 .merch-btn:hover{
@@ -133,8 +115,8 @@ h1::after{color:blue;animation:g2 .4s infinite;}
 .socials a{
   border:1px solid #fff;
   padding:10px 20px;
-  text-decoration:none;
   color:#fff;
+  text-decoration:none;
 }
 
 .socials a:hover{
@@ -142,7 +124,7 @@ h1::after{color:blue;animation:g2 .4s infinite;}
   color:#000;
 }
 
-/* ===== КУРСОР ===== */
+/* КУРСОР */
 .cursor{
   position:fixed;
   width:14px;
@@ -153,30 +135,6 @@ h1::after{color:blue;animation:g2 .4s infinite;}
   transform:translate(-50%,-50%);
   z-index:9999;
 }
-
-/* ===== ГЛИТЧ КАРТИНКА (НОВАЯ) ===== */
-#glitch-img{
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  max-width:60%;
-  max-height:60%;
-  opacity:0;
-  z-index:5;
-  pointer-events:none;
-  filter:contrast(2) brightness(1.2);
-}
-
-/* FLASH */
-.flash{
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:#fff;
-  opacity:0;
-  z-index:4;
-}
 </style>
 </head>
 
@@ -186,11 +144,6 @@ h1::after{color:blue;animation:g2 .4s infinite;}
 <div class="overlay"></div>
 
 <div class="cursor" id="cursor"></div>
-
-<!-- НОВАЯ ГЛИТЧ КАРТИНКА -->
-<img id="glitch-img" src="https://i.imgur.com/zjsLhAJ.png">
-
-<div class="flash" id="flash"></div>
 
 <audio id="sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3"></audio>
 
@@ -206,32 +159,18 @@ document.addEventListener("mousemove", e=>{
 document.body.addEventListener("click",()=>{
   document.getElementById("sound").play();
 },{once:true});
-
-/* ГЛИТЧ ЭФФЕКТ */
-setInterval(()=>{
-  let img = document.getElementById("glitch-img");
-  let flash = document.getElementById("flash");
-
-  if(Math.random() > 0.7){
-    img.style.opacity = 1;
-    img.style.transform = "translate(-50%,-50%) scale(1.1)";
-
-    flash.style.opacity = 0.3;
-
-    setTimeout(()=>{
-      img.style.opacity = 0;
-      img.style.transform = "translate(-50%,-50%)";
-      flash.style.opacity = 0;
-    }, 120);
-  }
-
-}, 2000);
 </script>
 
 <!-- HERO -->
 <section class="hero">
-  <h1>PAPA GABBA</h1>
-  <a href="https://open.spotify.com/" target="_blank" class="btn">LISTEN</a>
+
+  <!-- ЛОГО ВМЕСТО ТЕКСТА -->
+  <img src="https://i.imgur.com/zjsLhAJ.png" class="logo">
+
+  <a href="https://open.spotify.com/" target="_blank" class="btn">
+    LISTEN
+  </a>
+
 </section>
 
 <!-- ABOUT -->
@@ -245,23 +184,28 @@ setInterval(()=>{
 <!-- MERCH -->
 <section class="section">
   <h2>MERCH</h2>
+
   <div class="merch">
     <img src="https://i.imgur.com/CI0wmv2.jpeg">
-    <p style="margin-top:10px;">PAPA GABBA T-SHIRT</p>
-    <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="merch-btn">BUY</a>
+    <p>PAPA GABBA T-SHIRT</p>
+
+    <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="merch-btn">
+      BUY
+    </a>
   </div>
 </section>
 
 <!-- SOCIAL -->
 <section class="section">
   <h2>FOLLOW</h2>
+
   <div class="socials">
     <a href="https://instagram.com/papagabbaofficial" target="_blank">Instagram</a>
     <a href="https://open.spotify.com/" target="_blank">Spotify</a>
   </div>
 </section>
 
-<footer>
+<footer style="padding:40px;text-align:center;opacity:.5;">
   © 2026 PAPA GABBA
 </footer>
 

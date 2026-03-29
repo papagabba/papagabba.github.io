@@ -82,26 +82,51 @@ body{
 
 /* MERCH */
 .merch{
-  max-width:400px;
-  margin:0 auto;
+  position:relative;
+  overflow:hidden;
 }
 
 .merch img{
   width:100%;
-}
-
-.merch-btn{
+  transition:0.4s;
   display:block;
-  margin-top:15px;
-  padding:12px;
-  border:1px solid #fff;
-  color:#fff;
-  text-decoration:none;
 }
 
-.merch-btn:hover{
-  background:#fff;
-  color:#000;
+/* затемнение при hover */
+.merch::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  background:rgba(0,0,0,0.4);
+  opacity:0;
+  transition:0.3s;
+}
+
+/* эффект при наведении */
+.merch:hover img{
+  transform:scale(1.08) rotate(1deg);
+  filter:contrast(1.4) brightness(1.1);
+}
+
+/* overlay появляется */
+.merch:hover::after{
+  opacity:1;
+}
+
+/* глитч микро дергание */
+.merch:hover img{
+  animation:glitch 0.2s infinite;
+}
+
+@keyframes glitch{
+  0%{transform:translate(0)}
+  25%{transform:translate(-2px,2px)}
+  50%{transform:translate(2px,-2px)}
+  75%{transform:translate(-1px,1px)}
+  100%{transform:translate(0)}
 }
 
 /* SOCIAL */

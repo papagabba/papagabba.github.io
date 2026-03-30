@@ -92,22 +92,16 @@ body{
   color:#fff;
   text-decoration:none;
   transition:.3s;
-  position:relative;
   z-index:10;
 }
 
 .btn:hover{
   background:#fff;
   color:#000;
-  letter-spacing:2px;
 }
 
 .secondary-btn{
   opacity:0.7;
-}
-
-.secondary-btn:hover{
-  opacity:1;
 }
 
 /* SECTION */
@@ -118,22 +112,20 @@ body{
 
 /* MERCH */
 .merch{
-  position:relative;
   max-width:320px;
   margin:0 auto;
 }
 
 .merch img{
   width:100%;
-  transition:.4s;
+  transition:.3s;
 }
 
 .merch:hover img{
   transform:scale(1.05);
-  filter:contrast(1.4);
+  filter:contrast(1.3);
 }
 
-/* BUY BUTTON */
 .merch-btn{
   display:block;
   margin-top:15px;
@@ -141,13 +133,6 @@ body{
   border:1px solid #fff;
   color:#fff;
   text-decoration:none;
-  position:relative;
-  z-index:10;
-}
-
-.merch-btn:hover{
-  background:#fff;
-  color:#000;
 }
 
 /* SOCIAL */
@@ -164,12 +149,7 @@ body{
   text-decoration:none;
 }
 
-.socials a:hover{
-  background:#fff;
-  color:#000;
-}
-
-/* ===== GLITCH IMAGE ===== */
+/* GLITCH IMAGE */
 #glitch-img{
   position:fixed;
   top:50%;
@@ -189,7 +169,30 @@ body{
   background:#fff;
   opacity:0;
   z-index:3;
-  pointer-events:none;
+}
+
+/* QR */
+.qr-scare img{
+  width:150px;
+}
+
+/* SCARE */
+#scare{
+  position:fixed;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  z-index:999;
+}
+
+/* SHAKE */
+@keyframes shake{
+  0%{transform:translate(0)}
+  25%{transform:translate(-5px,5px)}
+  50%{transform:translate(5px,-5px)}
+  75%{transform:translate(-5px,2px)}
+  100%{transform:translate(0)}
 }
 </style>
 </head>
@@ -204,67 +207,84 @@ body{
 <img id="glitch-img" src="https://i.imgur.com/zjsLhAJ.png">
 <div class="flash" id="flash"></div>
 
+<!-- SCARE -->
+<img id="scare" src="https://i.imgur.com/zjsLhAJ.png">
+<audio id="screamSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_6c5d1b1c6f.mp3"></audio>
+
 <audio id="sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3"></audio>
 
 <script>
 /* CURSOR */
-const cursor = document.getElementById("cursor");
 document.addEventListener("mousemove", e=>{
-  cursor.style.left = e.clientX + "px";
-  cursor.style.top = e.clientY + "px";
+  cursor.style.left = e.clientX+"px";
+  cursor.style.top = e.clientY+"px";
 });
 
 /* SOUND */
 document.body.addEventListener("click",()=>{
-  document.getElementById("sound").play();
+  sound.play();
 },{once:true});
 
-/* BACKGROUND PARALLAX */
+/* PARALLAX */
 document.addEventListener("mousemove", e=>{
-  const bg = document.querySelector(".bg");
-  let x = (e.clientX/window.innerWidth-0.5)*30;
-  let y = (e.clientY/window.innerHeight-0.5)*30;
-  bg.style.transform = `scale(1.2) translate(${x}px,${y}px)`;
+  let x=(e.clientX/window.innerWidth-0.5)*30;
+  let y=(e.clientY/window.innerHeight-0.5)*30;
+  document.querySelector(".bg").style.transform=`scale(1.2) translate(${x}px,${y}px)`;
 });
 
 /* GLITCH */
 setInterval(()=>{
-  let img=document.getElementById("glitch-img");
-  let flash=document.getElementById("flash");
-
   if(Math.random()>0.7){
-    img.style.opacity=1;
-    flash.style.opacity=0.25;
-
+    glitch-img.style.opacity=1;
+    flash.style.opacity=0.2;
     setTimeout(()=>{
-      img.style.opacity=0;
+      glitch-img.style.opacity=0;
       flash.style.opacity=0;
     },120);
   }
 },2000);
+
+/* QR SCREAMER */
+navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+  const ctx=new AudioContext();
+  const analyser=ctx.createAnalyser();
+  const mic=ctx.createMediaStreamSource(stream);
+  mic.connect(analyser);
+  const data=new Uint8Array(analyser.frequencyBinCount);
+
+  function loop(){
+    analyser.getByteFrequencyData(data);
+    let volume=data.reduce((a,b)=>a+b)/data.length;
+
+    if(volume>75){
+      scare.style.opacity=1;
+      screamSound.play();
+      document.body.style.animation="shake 0.2s";
+
+      setTimeout(()=>{
+        scare.style.opacity=0;
+        document.body.style.animation="none";
+      },200);
+    }
+
+    requestAnimationFrame(loop);
+  }
+  loop();
+});
 </script>
 
 <!-- HERO -->
 <section class="hero">
-
   <img src="https://i.imgur.com/zjsLhAJ.png" class="logo">
 
-  <a href="https://open.spotify.com/" target="_blank" class="btn">
-    LISTEN
-  </a>
-
-  <a href="https://link.me/papagabba" target="_blank" class="btn secondary-btn">
-    LINKS
-  </a>
-
+  <a href="https://open.spotify.com/" target="_blank" class="btn">LISTEN</a>
+  <a href="https://link.me/papagabba" target="_blank" class="btn secondary-btn">LINKS</a>
 </section>
 
 <!-- ABOUT -->
 <section class="section">
   <h2>ABOUT</h2>
-  <p style="opacity:.6;max-width:500px;margin:0 auto;">
-    Raw energy. Dark aesthetics. Papa Gabba is underground chaos.
-  </p>
+  <p>Underground energy. Papa Gabba.</p>
 </section>
 
 <!-- MERCH -->
@@ -272,8 +292,7 @@ setInterval(()=>{
   <h2>MERCH</h2>
   <div class="merch">
     <img src="https://i.imgur.com/CI0wmv2.jpeg">
-    <p>PAPA GABBA T-SHIRT</p>
-    <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="merch-btn">BUY</a>
+    <a href="https://t.me/nxmxmxlxkxx" class="merch-btn">BUY</a>
   </div>
 </section>
 
@@ -281,14 +300,20 @@ setInterval(()=>{
 <section class="section">
   <h2>FOLLOW</h2>
   <div class="socials">
-    <a href="https://instagram.com/papagabbaofficial" target="_blank">Instagram</a>
-    <a href="https://open.spotify.com/" target="_blank">Spotify</a>
+    <a href="https://instagram.com/papagabbaofficial">Instagram</a>
+    <a href="https://open.spotify.com/">Spotify</a>
   </div>
 </section>
 
-<footer>
-  © 2026 PAPA GABBA
-</footer>
+<!-- QR -->
+<section class="section">
+  <h2>SCAN</h2>
+  <a href="https://link.me/papagabba" class="qr-scare">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://link.me/papagabba">
+  </a>
+</section>
+
+<footer>© 2026 PAPA GABBA</footer>
 
 </body>
 </html>

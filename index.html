@@ -14,7 +14,7 @@ body{
   font-family:'Orbitron',sans-serif;
   background:#000;
   color:#fff;
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
 /* ENTER */
@@ -47,30 +47,27 @@ body{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  z-index:5;
   position:relative;
+  z-index:5;
 }
 
-/* ===== LOGO WRAP (ВАЖНО) ===== */
+/* LOGO */
 .logo-wrap{
   position:relative;
   width:520px;
   max-width:90%;
 }
 
-/* основное изображение */
 .logo-main{
   width:100%;
   display:block;
 }
 
-/* glitch слои */
 .logo-glitch{
   position:absolute;
   inset:0;
   background:url("https://i.imgur.com/zjsLhAJ.png") center/contain no-repeat;
   opacity:0;
-  pointer-events:none;
 }
 
 .glitch .g1{
@@ -97,20 +94,86 @@ body{
   background:#fff;
   color:#000;
 }
+
+/* SECTION */
+.section{
+  padding:80px 20px;
+  text-align:center;
+  position:relative;
+  z-index:5;
+}
+
+/* MERCH */
+.merch{
+  max-width:260px;
+  margin:0 auto;
+  position:relative;
+  overflow:hidden;
+}
+
+.merch img{
+  width:100%;
+  display:block;
+  transition:0.3s;
+}
+
+/* hover эффект */
+.merch:hover img{
+  transform:scale(1.08);
+  filter:contrast(1.3);
+}
+
+/* BUY кнопка */
+.buy{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  padding:12px 30px;
+  border:1px solid #fff;
+  color:#fff;
+  text-decoration:none;
+  background:rgba(0,0,0,0.6);
+  opacity:0;
+  transition:0.3s;
+}
+
+.merch:hover .buy{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* SOCIAL */
+.socials{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+
+.socials a{
+  border:1px solid #fff;
+  padding:10px 20px;
+  text-decoration:none;
+  color:#fff;
+}
+
+.socials a:hover{
+  background:#fff;
+  color:#000;
+}
 </style>
 </head>
 
 <body>
 
 <div id="enter"><h1>ENTER</h1></div>
-
 <div class="bg" id="bg"></div>
 
+<!-- HERO -->
 <section class="hero">
 
   <div class="logo-wrap" id="logoWrap">
     <img src="https://i.imgur.com/zjsLhAJ.png" class="logo-main">
-
     <div class="logo-glitch g1"></div>
     <div class="logo-glitch g2"></div>
   </div>
@@ -120,18 +183,34 @@ body{
 
 </section>
 
+<!-- MERCH -->
+<section class="section">
+  <h2>MERCH</h2>
+
+  <div class="merch">
+    <img src="https://i.imgur.com/CI0wmv2.jpeg">
+    <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="buy">BUY</a>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section class="section">
+  <h2>FOLLOW</h2>
+
+  <div class="socials">
+    <a href="https://instagram.com/papagabbaofficial">Instagram</a>
+    <a href="https://open.spotify.com/">Spotify</a>
+  </div>
+</section>
+
 <script>
-/* ЖДЕМ ПОЛНУЮ ЗАГРУЗКУ */
 window.onload = () => {
 
   const enter = document.getElementById("enter");
   const bg = document.getElementById("bg");
   const logo = document.getElementById("logoWrap");
 
-  /* ENTER */
-  enter.onclick = ()=>{
-    enter.style.display="none";
-  };
+  enter.onclick = ()=> enter.style.display="none";
 
   let tx=0, ty=0, cx=0, cy=0;
   let lastX=0, lastY=0;
@@ -139,20 +218,20 @@ window.onload = () => {
   document.addEventListener("mousemove", e=>{
 
     /* фон */
-    let bx=(e.clientX/window.innerWidth-0.5)*50;
-    let by=(e.clientY/window.innerHeight-0.5)*50;
+    let bx=(e.clientX/window.innerWidth-0.5)*40;
+    let by=(e.clientY/window.innerHeight-0.5)*40;
     bg.style.transform=`scale(1.2) translate(${bx}px,${by}px)`;
 
     /* логотип */
-    tx=(e.clientX/window.innerWidth-0.5)*20;
-    ty=(e.clientY/window.innerHeight-0.5)*20;
+    tx=(e.clientX/window.innerWidth-0.5)*15;
+    ty=(e.clientY/window.innerHeight-0.5)*15;
 
-    /* скорость */
+    /* glitch */
     let speed=Math.abs(e.clientX-lastX)+Math.abs(e.clientY-lastY);
 
     if(speed>50){
       logo.classList.add("glitch");
-      setTimeout(()=>logo.classList.remove("glitch"),120);
+      setTimeout(()=>logo.classList.remove("glitch"),100);
     }
 
     lastX=e.clientX;

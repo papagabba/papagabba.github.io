@@ -17,11 +17,10 @@ body{
   overflow-x:hidden;
 }
 
-/* ===== ENTER ===== */
-#enter-screen{
+/* ENTER */
+#enter{
   position:fixed;
-  width:100%;
-  height:100%;
+  inset:0;
   background:#000;
   display:flex;
   justify-content:center;
@@ -30,19 +29,10 @@ body{
   cursor:pointer;
   transition:0.6s;
 }
+#enter h1{opacity:.6;transition:.3s}
+#enter:hover h1{opacity:1;letter-spacing:5px}
 
-#enter-screen h1{
-  font-size:2rem;
-  opacity:0.6;
-  transition:0.3s;
-}
-
-#enter-screen:hover h1{
-  opacity:1;
-  letter-spacing:5px;
-}
-
-/* ===== BACKGROUND ===== */
+/* BG */
 .bg{
   position:fixed;
   width:100%;
@@ -54,7 +44,6 @@ body{
   pointer-events:none;
   transition:transform 0.08s;
 }
-
 .overlay{
   position:fixed;
   width:100%;
@@ -64,11 +53,8 @@ body{
   pointer-events:none;
 }
 
-/* ===== CONTENT ===== */
-.hero,.section,footer{
-  position:relative;
-  z-index:5;
-}
+/* CONTENT */
+.hero,.section,footer{position:relative;z-index:5}
 
 /* HERO */
 .hero{
@@ -79,11 +65,45 @@ body{
   align-items:center;
 }
 
-/* LOGO */
+/* ===== LOGO GLITCH ===== */
+.logo-wrap{
+  position:relative;
+}
+
 .logo{
   width:80%;
-  max-width:500px;
-  margin-bottom:20px;
+  max-width:520px;
+  position:relative;
+  z-index:2;
+}
+
+/* glitch layers */
+.logo::before,
+.logo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("https://i.imgur.com/zjsLhAJ.png") center/contain no-repeat;
+  opacity:0;
+  pointer-events:none;
+}
+
+.logo::before{
+  filter:hue-rotate(90deg);
+}
+
+.logo::after{
+  filter:hue-rotate(-90deg);
+}
+
+/* glitch active */
+.glitch .logo::before{
+  opacity:0.6;
+  transform:translate(5px,-5px);
+}
+.glitch .logo::after{
+  opacity:0.6;
+  transform:translate(-5px,5px);
 }
 
 /* BUTTON */
@@ -95,7 +115,6 @@ body{
   text-decoration:none;
   transition:.2s;
 }
-
 .btn:hover{
   background:#fff;
   color:#000;
@@ -103,129 +122,101 @@ body{
 }
 
 /* SECTION */
-.section{
-  padding:80px 20px;
-  text-align:center;
-}
+.section{padding:80px 20px;text-align:center}
 
-/* ===== MERCH ===== */
+/* MERCH */
 .merch{
   max-width:260px;
   margin:0 auto;
   position:relative;
   overflow:hidden;
-  transition:0.1s;
 }
+.merch img{width:100%}
 
-.merch img{
-  width:100%;
-  transition:0.2s;
-}
-
-/* glitch layers */
-.merch::before,
-.merch::after{
-  content:"";
+/* BUY */
+.buy{
   position:absolute;
-  width:100%;
-  height:100%;
-  background:url("https://i.imgur.com/CI0wmv2.jpeg") center/cover;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  padding:12px 30px;
+  border:1px solid #fff;
+  color:#fff;
+  text-decoration:none;
+  background:rgba(0,0,0,0.6);
   opacity:0;
-  mix-blend-mode:screen;
-  pointer-events:none;
+  transition:0.3s;
 }
-
-.merch::before{ filter:hue-rotate(90deg); }
-.merch::after{ filter:hue-rotate(-90deg); }
-
-/* hover */
-.merch:hover img{
-  transform:scale(1.1);
-  filter:contrast(1.5);
-}
-
-.merch:hover::before{
-  opacity:0.4;
-  transform:translate(5px,-5px);
-}
-
-.merch:hover::after{
-  opacity:0.4;
-  transform:translate(-5px,5px);
+.merch:hover .buy{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
 }
 
 /* SOCIAL */
-.socials{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-}
-
+.socials{display:flex;justify-content:center;gap:20px}
 .socials a{
   border:1px solid #fff;
   padding:10px 20px;
   text-decoration:none;
   color:#fff;
 }
-
-.socials a:hover{
-  background:#fff;
-  color:#000;
-}
+.socials a:hover{background:#fff;color:#000}
 </style>
 </head>
 
 <body>
 
-<!-- ENTER -->
-<div id="enter-screen">
-  <h1>ENTER</h1>
-</div>
+<div id="enter"><h1>ENTER</h1></div>
 
 <div class="bg" id="bg"></div>
 <div class="overlay"></div>
 
 <script>
 /* ENTER */
-const enter = document.getElementById("enter-screen");
-enter.addEventListener("click", ()=>{
+enter.onclick=()=>{
   enter.style.opacity=0;
-  setTimeout(()=> enter.style.display="none",600);
-});
+  setTimeout(()=>enter.style.display="none",600);
+};
 
-/* PARALLAX */
+/* BG PARALLAX */
 document.addEventListener("mousemove", e=>{
   let x=(e.clientX/window.innerWidth-0.5)*80;
   let y=(e.clientY/window.innerHeight-0.5)*80;
-  document.getElementById("bg").style.transform =
-    `scale(1.3) translate(${x}px, ${y}px)`;
+  bg.style.transform=`scale(1.3) translate(${x}px,${y}px)`;
 });
 
-/* MERCH FOLLOW */
-const merch = document.querySelector(".merch");
+/* LOGO LIVE + GLITCH */
+const wrap=document.querySelector(".logo-wrap");
+
 document.addEventListener("mousemove", e=>{
-  if(!merch) return;
-  let rect = merch.getBoundingClientRect();
-  let x = (e.clientX - rect.left - rect.width/2)/15;
-  let y = (e.clientY - rect.top - rect.height/2)/15;
-  merch.style.transform = `rotateX(${-y}deg) rotateY(${x}deg)`;
+  let x=(e.clientX/window.innerWidth-0.5)*40;
+  let y=(e.clientY/window.innerHeight-0.5)*40;
+
+  wrap.style.transform=`translate(${x}px,${y}px)`;
+
+  /* случайный glitch */
+  if(Math.random()>0.85){
+    wrap.classList.add("glitch");
+    setTimeout(()=>wrap.classList.remove("glitch"),120);
+  }
 });
 </script>
 
 <!-- HERO -->
 <section class="hero">
-  <img src="https://i.imgur.com/zjsLhAJ.png" class="logo">
+  <div class="logo-wrap">
+    <img src="https://i.imgur.com/zjsLhAJ.png" class="logo">
+  </div>
 
-  <a href="https://open.spotify.com/artist/0wpnVBR3J3rYbiuyB7FId3?si=mI3vDzQFRxqkYtpLTlk9Hg" target="_blank" class="btn">LISTEN</a>
+  <a href="https://open.spotify.com/" target="_blank" class="btn">LISTEN</a>
   <a href="https://link.me/papagabba" target="_blank" class="btn">LINKS</a>
 </section>
 
 <!-- TRACK -->
 <section class="section">
   <h2>LATEST TRACK</h2>
-
-  <iframe style="border-radius:12px" 
-  src="https://open.spotify.com/embed/track/7IzqmNEau3loDdGiLRpwcx" 
+  <iframe style="border-radius:12px"
+  src="https://open.spotify.com/embed/track/7IzqmNEau3loDdGiLRpwcx"
   width="300" height="80"></iframe>
 </section>
 
@@ -235,14 +226,13 @@ document.addEventListener("mousemove", e=>{
 
   <div class="merch">
     <img src="https://i.imgur.com/CI0wmv2.jpeg">
-    <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="btn">BUY</a>
+    <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="buy">BUY</a>
   </div>
 </section>
 
 <!-- SOCIAL -->
 <section class="section">
   <h2>FOLLOW</h2>
-
   <div class="socials">
     <a href="https://instagram.com/papagabbaofficial">Instagram</a>
     <a href="https://open.spotify.com/">Spotify</a>
@@ -250,7 +240,7 @@ document.addEventListener("mousemove", e=>{
 </section>
 
 <footer style="text-align:center;padding:40px 0;opacity:.4;">
-  © 2026 PAPA GABBA
+© 2026 PAPA GABBA
 </footer>
 
 </body>

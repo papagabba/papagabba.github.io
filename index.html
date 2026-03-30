@@ -14,7 +14,7 @@ body{
   font-family:'Orbitron',sans-serif;
   background:#000;
   color:#fff;
-  overflow-x:hidden;
+  overflow:hidden;
 }
 
 /* ENTER */
@@ -25,17 +25,8 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  z-index:99999;
+  z-index:9999;
   cursor:pointer;
-  transition:0.6s;
-}
-#enter h1{
-  opacity:.6;
-  transition:.3s;
-}
-#enter:hover h1{
-  opacity:1;
-  letter-spacing:5px;
 }
 
 /* BACKGROUND */
@@ -44,19 +35,9 @@ body{
   width:100%;
   height:100%;
   background:url("https://i.imgur.com/YnRN8a6.jpeg") center/cover no-repeat;
-  filter:blur(5px) brightness(0.45);
-  transform:scale(1.3);
+  filter:blur(6px) brightness(0.4);
+  transform:scale(1.2);
   z-index:0;
-  pointer-events:none;
-  transition:transform 0.08s;
-}
-.overlay{
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.6);
-  z-index:1;
-  pointer-events:none;
 }
 
 /* HERO */
@@ -66,110 +47,53 @@ body{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  text-align:center;
-  position:relative;
   z-index:5;
-}
-
-/* LOGO */
-.logo-wrap{
-  perspective:1000px;
-}
-.logo{
-  width:80%;
-  max-width:520px;
-  display:block;
   position:relative;
-  transition:transform 0.2s ease-out;
-  will-change:transform;
 }
 
-/* subtle glitch */
-.logo.glitch::before,
-.logo.glitch::after{
-  content:"";
+/* ===== LOGO WRAP (ВАЖНО) ===== */
+.logo-wrap{
+  position:relative;
+  width:520px;
+  max-width:90%;
+}
+
+/* основное изображение */
+.logo-main{
+  width:100%;
+  display:block;
+}
+
+/* glitch слои */
+.logo-glitch{
   position:absolute;
   inset:0;
   background:url("https://i.imgur.com/zjsLhAJ.png") center/contain no-repeat;
-  opacity:0.25;
+  opacity:0;
   pointer-events:none;
 }
-.logo.glitch::before{
+
+.glitch .g1{
+  opacity:0.5;
+  transform:translate(3px,-3px);
   filter:hue-rotate(90deg);
-  transform:translate(2px,-2px);
 }
-.logo.glitch::after{
+
+.glitch .g2{
+  opacity:0.5;
+  transform:translate(-3px,3px);
   filter:hue-rotate(-90deg);
-  transform:translate(-2px,2px);
 }
 
 /* BUTTON */
 .btn{
   margin-top:15px;
-  padding:14px 40px;
+  padding:12px 35px;
   border:1px solid #fff;
   color:#fff;
   text-decoration:none;
-  transition:.2s;
 }
 .btn:hover{
-  background:#fff;
-  color:#000;
-  letter-spacing:2px;
-}
-
-/* SECTION */
-.section{
-  padding:80px 20px;
-  text-align:center;
-  position:relative;
-  z-index:5;
-}
-
-/* MERCH */
-.merch{
-  max-width:260px;
-  margin:0 auto;
-  position:relative;
-  overflow:hidden;
-}
-.merch img{
-  width:100%;
-  display:block;
-}
-
-/* BUY hover */
-.buy{
-  position:absolute;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%) translateY(20px);
-  padding:12px 30px;
-  border:1px solid #fff;
-  color:#fff;
-  text-decoration:none;
-  background:rgba(0,0,0,0.6);
-  opacity:0;
-  transition:0.3s;
-}
-.merch:hover .buy{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-
-/* SOCIAL */
-.socials{
-  display:flex;
-  justify-content:center;
-  gap:20px;
-}
-.socials a{
-  border:1px solid #fff;
-  padding:10px 20px;
-  text-decoration:none;
-  color:#fff;
-}
-.socials a:hover{
   background:#fff;
   color:#000;
 }
@@ -181,99 +105,76 @@ body{
 <div id="enter"><h1>ENTER</h1></div>
 
 <div class="bg" id="bg"></div>
-<div class="overlay"></div>
 
-<script>
-/* ENTER */
-enter.onclick=()=>{
-  enter.style.opacity=0;
-  setTimeout(()=>enter.style.display="none",600);
-};
-
-/* PARALLAX BG */
-document.addEventListener("mousemove", e=>{
-  let x=(e.clientX/window.innerWidth-0.5)*60;
-  let y=(e.clientY/window.innerHeight-0.5)*60;
-  bg.style.transform=`scale(1.3) translate(${x}px,${y}px)`;
-});
-
-/* LOGO PREMIUM + GLITCH */
-const logo=document.querySelector(".logo");
-
-let targetX=0,targetY=0,currentX=0,currentY=0;
-let lastX=0,lastY=0;
-
-document.addEventListener("mousemove", e=>{
-  targetX=(e.clientX/window.innerWidth-0.5)*20;
-  targetY=(e.clientY/window.innerHeight-0.5)*20;
-
-  let speed=Math.abs(e.clientX-lastX)+Math.abs(e.clientY-lastY);
-
-  if(speed>40){
-    logo.classList.add("glitch");
-    setTimeout(()=>logo.classList.remove("glitch"),120);
-  }
-
-  lastX=e.clientX;
-  lastY=e.clientY;
-});
-
-function animate(){
-  currentX+=(targetX-currentX)*0.08;
-  currentY+=(targetY-currentY)*0.08;
-
-  logo.style.transform=`
-    translate(${currentX}px,${currentY}px)
-    rotateX(${currentY*-0.5}deg)
-    rotateY(${currentX*0.5}deg)
-  `;
-
-  requestAnimationFrame(animate);
-}
-animate();
-</script>
-
-<!-- HERO -->
 <section class="hero">
-  <div class="logo-wrap">
-    <img src="https://i.imgur.com/zjsLhAJ.png" class="logo">
+
+  <div class="logo-wrap" id="logoWrap">
+    <img src="https://i.imgur.com/zjsLhAJ.png" class="logo-main">
+
+    <div class="logo-glitch g1"></div>
+    <div class="logo-glitch g2"></div>
   </div>
 
   <a href="https://open.spotify.com/" target="_blank" class="btn">LISTEN</a>
   <a href="https://link.me/papagabba" target="_blank" class="btn">LINKS</a>
+
 </section>
 
-<!-- TRACK -->
-<section class="section">
-  <h2>LATEST TRACK</h2>
-  <iframe style="border-radius:12px"
-  src="https://open.spotify.com/embed/track/7IzqmNEau3loDdGiLRpwcx"
-  width="300" height="80"></iframe>
-</section>
+<script>
+/* ЖДЕМ ПОЛНУЮ ЗАГРУЗКУ */
+window.onload = () => {
 
-<!-- MERCH -->
-<section class="section">
-  <h2>MERCH</h2>
+  const enter = document.getElementById("enter");
+  const bg = document.getElementById("bg");
+  const logo = document.getElementById("logoWrap");
 
-  <div class="merch">
-    <img src="https://i.imgur.com/CI0wmv2.jpeg">
-    <a href="https://t.me/nxmxmxlxkxx" target="_blank" class="buy">BUY</a>
-  </div>
-</section>
+  /* ENTER */
+  enter.onclick = ()=>{
+    enter.style.display="none";
+  };
 
-<!-- SOCIAL -->
-<section class="section">
-  <h2>FOLLOW</h2>
+  let tx=0, ty=0, cx=0, cy=0;
+  let lastX=0, lastY=0;
 
-  <div class="socials">
-    <a href="https://instagram.com/papagabbaofficial">Instagram</a>
-    <a href="https://open.spotify.com/">Spotify</a>
-  </div>
-</section>
+  document.addEventListener("mousemove", e=>{
 
-<footer style="text-align:center;padding:40px 0;opacity:.4;">
-© 2026 PAPA GABBA
-</footer>
+    /* фон */
+    let bx=(e.clientX/window.innerWidth-0.5)*50;
+    let by=(e.clientY/window.innerHeight-0.5)*50;
+    bg.style.transform=`scale(1.2) translate(${bx}px,${by}px)`;
+
+    /* логотип */
+    tx=(e.clientX/window.innerWidth-0.5)*20;
+    ty=(e.clientY/window.innerHeight-0.5)*20;
+
+    /* скорость */
+    let speed=Math.abs(e.clientX-lastX)+Math.abs(e.clientY-lastY);
+
+    if(speed>50){
+      logo.classList.add("glitch");
+      setTimeout(()=>logo.classList.remove("glitch"),120);
+    }
+
+    lastX=e.clientX;
+    lastY=e.clientY;
+  });
+
+  function loop(){
+    cx += (tx-cx)*0.08;
+    cy += (ty-cy)*0.08;
+
+    logo.style.transform = `
+      translate(${cx}px,${cy}px)
+      rotateX(${cy*-0.4}deg)
+      rotateY(${cx*0.4}deg)
+    `;
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
+</script>
 
 </body>
 </html>
